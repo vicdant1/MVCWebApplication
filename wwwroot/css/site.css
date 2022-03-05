@@ -1,3 +1,7 @@
+:root{
+    --teste: #0094ff;
+}
+
 html {
   font-size: 14px;
 }
@@ -14,5 +18,15 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f8f9fa;
+}
+
+a{
+    text-decoration: none !important;
+    color: inherit;
+}
+
+#Footer{
+    min-height: 90px;
 }
