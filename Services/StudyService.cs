@@ -29,6 +29,8 @@ namespace MVCWebApplication.Services
 
         public void Delete(Study study) => _studyRepository.Delete(study);
 
+        public void Update(Study study) => _studyRepository.Update(study);
+
         public async Task<bool> SaveChangesAsync() => await _studyRepository.SaveChangesAsync();
 
     }

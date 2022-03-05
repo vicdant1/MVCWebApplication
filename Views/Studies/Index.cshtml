@@ -33,7 +33,7 @@
                     <td>@item.Content</td>
                     <td><i class="fas fa-@(item.IsFinished ? "check" : "times")-circle fa-lg" style="color:@(item.IsFinished ? "green" : "red")"></i></td>
                     <td>
-                        <button class="btn btn-primary" onclick="Edit(@item.Id)"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-primary" onclick="OpenRegisterModal(@item.Id)"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger" onclick="Delete(@item.Id)"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
@@ -49,13 +49,7 @@
             <h5 class="modal-title" id="newRegModalLabel">Add a new study</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-              @Html.Partial("_DataForm")
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="SubmitStudy()">Save</button>
-          </div>
+          <div id="modal-body"></div>
         </div>
       </div>
     </div>
@@ -63,13 +57,23 @@
 
 @section Scripts {
     <script>
-        function OpenRegisterModal() 
+        function OpenRegisterModal(id)
         {
-            $('#newRegModal').modal("show")
+            if(id == undefined)
+                id = 0;
+
+            $("#modal-body").load("Studies/OpenDataRegModal?id=" + id, function(){
+                $('#newRegModal').modal("show");
+            });
+
         }
 
-        function SubmitStudy(){
+        function SubmitStudy(id){
             var formData = new FormData(document.querySelector('#formAdd'));
+            const studyId = id == undefined ? 0 : id;
+
+            formData.append("Id", studyId);
+
             $.ajax({
                 method: 'POST',
                 url: 'Studies/AddNewStudy',
@@ -77,7 +81,12 @@
                 processData: false,
                 contentType: false,
                 success: function(response){
+                    $('#formAdd').trigger("reset");
                     $.notify(response, "success");
+
+                    setTimeout(function(){
+                        location.reload();
+                    }, 700);
                 },
                 error: function(error){
                     $.notify(error.responseText, "error");
@@ -95,6 +104,18 @@
                     method: "DELETE",
                     data: {
                         id
+                    },
+                    success: function(response){
+                        console.log(response);
+                        $.notify(response, "success");
+
+                        setTimeout(function(){
+                            location.reload();
+                        }, 700);
+                    },
+                    error: function(error){
+                        console.log(error.responseText);
+                        $.notify(error.responseText, "error");
                     }
                 })
             }

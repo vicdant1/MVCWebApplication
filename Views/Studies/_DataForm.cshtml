@@ -1,38 +1,47 @@
-﻿@using MVCWebApplication.Enums
-<form id="formAdd">
-  <div class="mb-3">
-    <label for="content" class="form-label">Content*</label>
-    <input name="content" type="text" class="form-control" id="content" placeholder="Science, letters and arts" required>
-    <div id="emailHelp" class="form-text">Short description about the topic.</div>
-  </div>
+﻿@model Study
+@using MVCWebApplication.Enums
+@using MVCWebApplication.Models.Studies
 
-  <div class="mb-3 row">
+<div class="modal-body">
+    <form id="formAdd">
+        <div class="mb-3">
+            <label for="content" class="form-label">Content*</label>
+            <input name="content" type="text" class="form-control" id="content" placeholder="Science, letters and arts" required value="@Model?.Content">
+            <div id="emailHelp" class="form-text">Short description about the topic.</div>
+        </div>
 
-      <div class="col-md-4">
-          <label for="origin" class="form-label">Origin*</label>
-          <select name="origin" class="form-select" required>
-              <option selected disabled value="0">Select an origin</option>
-              @foreach(var item in Enum.GetValues(typeof(StudyStatus)))
-                {
-                    <option value="@((int) item)">@item.ToString()</option>
-                }
-            </select>
-      </div>
+        <div class="mb-3 row">
+
+            <div class="col-md-4">
+                <label for="origin" class="form-label">Origin*</label>
+                <select name="origin" class="form-select" required>
+                    <!option selected disabled value="0">Select an origin</!option>
+                    @foreach (var item in Enum.GetValues(typeof(StudyStatus)))
+                    {
+                        <!option @(Model?.Origin == (int) item ? "selected" : "") value="@((int) item)">@item.ToString()</!option>
+                    }
+                </select>
+            </div>
 
 
-      <div class="col-md-4">
-          <label for="isFinished" class="form-label">Is done?*</label>
-          <select name="isFinished" class="form-select" required>
-              <option selected disabled value="-1">Is done?</option>
-              <option value="true">Yes</option>
-              <option value="false">Nop</option>
-          </select>
-      </div>
+            <div class="col-md-4">
+                <label for="isFinished" class="form-label">Is done?*</label>
+                <select name="isFinished" class="form-select" required>
+                    <!option selected disabled value="-1">Is done?</!option>
+                    <!option @(Model?.IsFinished == true ? "selected" : "") value="true">Yes</!option>
+                    <!option @(Model?.IsFinished == false ? "selected" : "") value="false">Nop</!option>
+                </select>
+            </div>
 
-      <div class="col-md-4">
-          <label for="beginning" class="form-label">Beginning*</label>
-          <input name="beginning" class="form-control" type="date" required/>
-      </div>
-  </div>
+            <div class="col-md-4">
+                <label for="beginning" class="form-label">Beginning*</label>
+                <input value="@Model?.Beginning.ToString("yyyy-MM-dd")" name="beginning" class="form-control" type="date" required />
+            </div>
+        </div>
+    </form>
+</div>
 
-</form>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary btn-sm" onclick="SubmitStudy(@Model?.Id)">Save</button>
+</div>

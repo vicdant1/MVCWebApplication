@@ -26,7 +26,10 @@ namespace MVCWebApplication.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Missing data");
 
-            _studyService.Add(study);
+            if (study.Id == 0)
+                _studyService.Add(study);
+            else
+                _studyService.Update(study);
 
             return await _studyService.SaveChangesAsync() ? Ok("Study added successfully") : BadRequest("Something went wrong");
         }
@@ -43,6 +46,19 @@ namespace MVCWebApplication.Controllers
             _studyService.Delete(studyData);
             
             return await _studyService.SaveChangesAsync() ? Ok("Study deleted") : BadRequest("Something went wrong");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OpenDataRegModal(int id)
+        {
+            if(id != 0)
+            {
+                var study = await _studyService.GetStudyByIdAsync(id);
+
+                return PartialView("~/Views/Studies/_DataForm.cshtml", study);
+            }
+
+            return PartialView("~/Views/Studies/_DataForm.cshtml");
         }
     }
 }
