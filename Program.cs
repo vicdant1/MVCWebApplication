@@ -1,7 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using MVCWebApplication.Data;
+using MVCWebApplication.Repository;
+using MVCWebApplication.Repository.Interfaces;
+using MVCWebApplication.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+builder.Services.AddScoped<IStudyRepository, StudyRepository>();
+builder.Services.AddScoped<StudyService>();
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
+    builder.Configuration.GetConnectionString("defaultConnection")
+));
 
 var app = builder.Build();
 

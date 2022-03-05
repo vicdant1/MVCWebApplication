@@ -1,22 +1,37 @@
-﻿@{
+﻿@using MVCWebApplication.Models.ViewModel
+@using static MVCWebApplication.Models.ViewModel.StudyViewModel
+@model StudyViewModel
+@{
     ViewData["Title"] = "JayVerse | Studies";
 }
 
 <div>
     <h1 class="text-center">Studies</h1>
 
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mb-3">
         <h3>Thing's I've studied</h3>
-        <button class="btn btn-success"><i class="fas fa-folder-plus"></i></button>
+        <button class="btn btn-success" onclick="OpenRegisterModal()"><i class="fas fa-folder-plus"></i></button>
     </div>
-
-    <table class="table">
-        <thead>
-
+    
+    <table class="table dataTableDisplay">
+        <thead class="text-center">
+            <tr>
+                <th>Origin</th>
+                <th>Beginning</th>
+                <th>Content</th>
+                <th>Done?</th>
+            </tr>
         </thead>
-        <tbody>
-
+        <tbody class="text-center">
+            @foreach(var item in Model.Studies)
+            {
+                <tr>
+                    <td>@((StudyStatus) item.Origin)</td>
+                    <td>@item.Beginning.ToString("d")</td>
+                    <td>@item.Content</td>
+                    <td><i class="fas fa-@(item.IsFinished ? "check" : "times")-circle fa-lg" style="color:@(item.IsFinished ? "green" : "red")"></i></td>
+                </tr>
+            }
         </tbody>
     </table>
-
 </div>
