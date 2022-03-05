@@ -25,5 +25,11 @@ namespace MVCWebApplication.Services
 
         public Task<Study> GetStudyByIdAsync(int id) => _studyRepository.GetStudyByIdAsync(id);
 
+        public void Add(Study study) => _studyRepository.Add(study);
+
+        public void Delete(Study study) => _studyRepository.Delete(study);
+
+        public async Task<bool> SaveChangesAsync() => await _studyRepository.SaveChangesAsync();
+
     }
 }

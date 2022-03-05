@@ -18,9 +18,9 @@ namespace MVCWebApplication.Repository
             return await _appDbContext.Studies.ToListAsync();
         }
 
-        public Task<Study> GetStudyByIdAsync(int id)
+        public async Task<Study> GetStudyByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _appDbContext.Studies.Where(s => s.Id == id).FirstOrDefaultAsync();
         }
     }
 }

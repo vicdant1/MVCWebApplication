@@ -1,5 +1,6 @@
-﻿@using MVCWebApplication.Models.ViewModel
-@using static MVCWebApplication.Models.ViewModel.StudyViewModel
+﻿@using MVCWebApplication.Enums
+@using MVCWebApplication.Models.ViewModel
+
 @model StudyViewModel
 @{
     ViewData["Title"] = "JayVerse | Studies";
@@ -20,6 +21,7 @@
                 <th>Beginning</th>
                 <th>Content</th>
                 <th>Done?</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody class="text-center">
@@ -30,8 +32,73 @@
                     <td>@item.Beginning.ToString("d")</td>
                     <td>@item.Content</td>
                     <td><i class="fas fa-@(item.IsFinished ? "check" : "times")-circle fa-lg" style="color:@(item.IsFinished ? "green" : "red")"></i></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="Edit(@item.Id)"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" onclick="Delete(@item.Id)"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <!-- Modal Add Register -->
+    <div class="modal fade" id="newRegModal" tabindex="-1" aria-labelledby="newRegModallLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newRegModalLabel">Add a new study</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              @Html.Partial("_DataForm")
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="SubmitStudy()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        function OpenRegisterModal() 
+        {
+            $('#newRegModal').modal("show")
+        }
+
+        function SubmitStudy(){
+            var formData = new FormData(document.querySelector('#formAdd'));
+            $.ajax({
+                method: 'POST',
+                url: 'Studies/AddNewStudy',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response){
+                    $.notify(response, "success");
+                },
+                error: function(error){
+                    $.notify(error.responseText, "error");
+                }
+            });
+
+        }
+
+        function Delete(id)
+        {
+            if(confirm("Are you sure you want to delete this study register?"))
+            {
+                $.ajax({
+                    url: 'Studies/DeleteStudy',
+                    method: "DELETE",
+                    data: {
+                        id
+                    }
+                })
+            }
+        }
+
+    </script>
+}
