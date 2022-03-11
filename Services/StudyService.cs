@@ -22,6 +22,7 @@ namespace MVCWebApplication.Services
             return new StudyViewModel(studies);
         }
 
+        public async Task<IEnumerable<Study>> GetSearchStudies(string searchString) => await _studyRepository.GetSearchStudies(searchString);
 
         public Task<Study> GetStudyByIdAsync(int id) => _studyRepository.GetStudyByIdAsync(id);
 

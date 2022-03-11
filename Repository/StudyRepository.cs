@@ -13,6 +13,11 @@ namespace MVCWebApplication.Repository
             _appDbContext = appDbContext;
         }
 
+        public async Task<IEnumerable<Study>> GetSearchStudies(string searchString)
+        {
+            return await _appDbContext.Studies.Where(s => s.Content.Contains(searchString)).ToListAsync();
+        }
+
         public async Task<IEnumerable<Study>> GetStudiesAsync()
         {
             return await _appDbContext.Studies.ToListAsync();

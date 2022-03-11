@@ -1,0 +1,11 @@
+﻿@using MVCWebApplication.Models.Studies
+@model IEnumerable<Study>
+
+
+
+    <ul>
+        @foreach(var study in Model)
+    {
+        <li>@study.Content</li>
+    }
+</ul>

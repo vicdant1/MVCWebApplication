@@ -60,5 +60,16 @@ namespace MVCWebApplication.Controllers
 
             return PartialView("~/Views/Studies/_DataForm.cshtml");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchStudies(string searchString)
+        {
+            if (String.IsNullOrWhiteSpace(searchString))
+                return BadRequest("Search something!");
+
+            var studies = await _studyService.GetSearchStudies(searchString);
+
+            return PartialView("_Studies.cshtml", studies);
+        }
     }
 }

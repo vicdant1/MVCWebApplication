@@ -13,7 +13,7 @@
         <h3>Thing's I've studied</h3>
         <button class="btn btn-success" onclick="OpenRegisterModal()"><i class="fas fa-folder-plus"></i></button>
     </div>
-    
+
     <table class="table dataTableDisplay">
         <thead class="text-center">
             <tr>
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody class="text-center">
-            @foreach(var item in Model.Studies)
+            @foreach (var item in Model.Studies)
             {
                 <tr>
                     <td>@((StudyStatus) item.Origin)</td>
@@ -41,47 +41,97 @@
         </tbody>
     </table>
 
+    <div>
+        <input type="text" name="searchString" id="searchString" placeholder="Search something"/>
+        <button class="btn btn-primary" onclick="searchStudy()"><i class="fas fa-search"></i></button>
+        <div id="dataContainer">
+            @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
+        </div>
+    </div>
+
     <!-- Modal Add Register -->
     <div class="modal fade" id="newRegModal" tabindex="-1" aria-labelledby="newRegModallLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="newRegModalLabel">Add a new study</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div id="modal-body"></div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newRegModalLabel">Add a new study</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="modal-body"></div>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 
 @section Scripts {
-    <script>
-        function OpenRegisterModal(id)
+<script>
+
+    const searchStudy = () => {
+        let searchString = $("#searchString").val();
+        console.log(JSON.stringify(searchString));
+
+        $.ajax({
+            url: "Studies/SearchStudies",
+            method: "POST",
+            data: JSON.stringify(searchString),
+            contentType: "application/json",
+            dataType: "application/json",
+            success: function(response) {
+                console.log(response)
+            }
+        });
+    }
+
+    function OpenRegisterModal(id)
+    {
+        if(id == undefined)
+            id = 0;
+
+        $("#modal-body").load("Studies/OpenDataRegModal?id=" + id, function(){
+            $('#newRegModal').modal("show");
+        });
+
+    }
+
+    function SubmitStudy(id){
+        var formData = new FormData(document.querySelector('#formAdd'));
+        const studyId = id == undefined ? 0 : id;
+
+        formData.append("Id", studyId);
+
+        $.ajax({
+            method: 'POST',
+            url: 'Studies/AddNewStudy',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response){
+                $('#formAdd').trigger("reset");
+                $.notify(response, "success");
+
+                setTimeout(function(){
+                    location.reload();
+                }, 700);
+            },
+            error: function(error){
+                $.notify(error.responseText, "error");
+            }
+        });
+
+    }
+
+    function Delete(id)
+    {
+        if(confirm("Are you sure you want to delete this study register?"))
         {
-            if(id == undefined)
-                id = 0;
-
-            $("#modal-body").load("Studies/OpenDataRegModal?id=" + id, function(){
-                $('#newRegModal').modal("show");
-            });
-
-        }
-
-        function SubmitStudy(id){
-            var formData = new FormData(document.querySelector('#formAdd'));
-            const studyId = id == undefined ? 0 : id;
-
-            formData.append("Id", studyId);
-
             $.ajax({
-                method: 'POST',
-                url: 'Studies/AddNewStudy',
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: 'Studies/DeleteStudy',
+                method: "DELETE",
+                data: {
+                    id
+                },
                 success: function(response){
-                    $('#formAdd').trigger("reset");
+                    console.log(response);
                     $.notify(response, "success");
 
                     setTimeout(function(){
@@ -89,37 +139,12 @@
                     }, 700);
                 },
                 error: function(error){
+                    console.log(error.responseText);
                     $.notify(error.responseText, "error");
                 }
-            });
-
+            })
         }
+    }
 
-        function Delete(id)
-        {
-            if(confirm("Are you sure you want to delete this study register?"))
-            {
-                $.ajax({
-                    url: 'Studies/DeleteStudy',
-                    method: "DELETE",
-                    data: {
-                        id
-                    },
-                    success: function(response){
-                        console.log(response);
-                        $.notify(response, "success");
-
-                        setTimeout(function(){
-                            location.reload();
-                        }, 700);
-                    },
-                    error: function(error){
-                        console.log(error.responseText);
-                        $.notify(error.responseText, "error");
-                    }
-                })
-            }
-        }
-
-    </script>
+</script>
 }

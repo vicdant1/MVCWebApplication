@@ -6,5 +6,6 @@ namespace MVCWebApplication.Repository.Interfaces
     {
         Task<IEnumerable<Study>> GetStudiesAsync();
         Task<Study> GetStudyByIdAsync(int id);
+        Task<IEnumerable<Study>> GetSearchStudies(string searchString);
     }
 }
