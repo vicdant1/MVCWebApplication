@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCWebApplication.Models;
 using MVCWebApplication.Models.Studies;
 using MVCWebApplication.Services;
 
@@ -62,12 +63,15 @@ namespace MVCWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SearchStudies(string searchString)
+        public async Task<IActionResult> SearchStudies([FromBody]StudiesSearchDTO model)
         {
-            if (String.IsNullOrWhiteSpace(searchString))
-                return BadRequest("Search something!");
+            if (String.IsNullOrWhiteSpace(model.searchString))
+            {
+                var allStudies = await _studyService.GetStudiesAsync();
+                return PartialView("~/Views/Studies/_Studies.cshtml", allStudies.Studies.ToList());
+            }
 
-            var studies = await _studyService.GetSearchStudies(searchString);
+            var studies = await _studyService.GetSearchStudies(model.searchString);
 
             return PartialView("~/Views/Studies/_Studies.cshtml", studies);
         }
