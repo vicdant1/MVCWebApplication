@@ -45,8 +45,8 @@
         <input type="text" name="searchString" id="searchString" placeholder="Search something"/>
         <button class="btn btn-primary" onclick="searchStudy()"><i class="fas fa-search"></i></button>
         <div id="dataContainer">
-        </div>
             @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
+        </div>
     </div>
 
     <!-- Modal Add Register -->
@@ -67,6 +67,10 @@
 <script>
 
     function searchStudy(){
+        /* 
+
+        resume later
+        
         let searchString = JSON.stringify({searchString: $("#searchString").val()});
         console.log(searchString)
 
@@ -83,6 +87,23 @@
                 $("#dataContainer").html(response);
             }
         });
+
+        */
+
+       let searchString = $("#searchString").val();
+
+       $.ajax({
+
+           method: "POST",
+           url: `/Studies/SearchStudies?searchString=${searchString}`,
+           contentType: "application/json",
+           dataType: "html",
+           success: function(res){
+               $("#dataContainer").html(res)
+           }
+       });
+
+
     }
 
     function OpenRegisterModal(id)
