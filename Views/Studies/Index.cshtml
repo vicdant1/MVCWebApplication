@@ -45,8 +45,8 @@
         <input type="text" name="searchString" id="searchString" placeholder="Search something"/>
         <button class="btn btn-primary" onclick="searchStudy()"><i class="fas fa-search"></i></button>
         <div id="dataContainer">
-            @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
         </div>
+            @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
     </div>
 
     <!-- Modal Add Register -->
@@ -66,18 +66,21 @@
 @section Scripts {
 <script>
 
-    const searchStudy = () => {
-        let searchString = $("#searchString").val();
-        console.log(JSON.stringify(searchString));
+    function searchStudy(){
+        let searchString = JSON.stringify({searchString: $("#searchString").val()});
+        console.log(searchString)
 
         $.ajax({
-            url: "Studies/SearchStudies",
-            method: "POST",
-            data: JSON.stringify(searchString),
-            contentType: "application/json",
-            dataType: "application/json",
+            type: 'POST',
+            url: "@Url.Action("SearchStudies","Studies")",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "html",
+
+            processData: false,
+            data: searchString,
             success: function(response) {
                 console.log(response)
+                $("#dataContainer").html(response);
             }
         });
     }

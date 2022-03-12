@@ -69,7 +69,7 @@ namespace MVCWebApplication.Controllers
 
             var studies = await _studyService.GetSearchStudies(searchString);
 
-            return PartialView("_Studies.cshtml", studies);
+            return PartialView("~/Views/Studies/_Studies.cshtml", studies);
         }
     }
 }
