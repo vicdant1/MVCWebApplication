@@ -47,7 +47,7 @@ namespace MVCWebApplication.Controllers
         // GET: Entertainments/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView("~/Views/Entertainments/_Create.cshtml");
         }
 
         // POST: Entertainments/Create
@@ -63,7 +63,7 @@ namespace MVCWebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(entertainment);
+            return PartialView("~/Views/Entertainments/_Create.cshtml", entertainment);
         }
 
         // GET: Entertainments/Edit/5

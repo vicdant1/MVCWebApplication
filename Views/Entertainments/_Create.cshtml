@@ -1,0 +1,40 @@
+﻿@using MVCWebApplication.Enums
+@model MVCWebApplication.Models.Entertainment.Entertainment
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<form id="createForm" class="row" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group col-md-6">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Year" class="control-label"></label>
+        <input asp-for="Year" class="form-control" />
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Country" class="control-label"></label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="SawAt" class="control-label"></label>
+        <input asp-for="SawAt" class="form-control" />
+        <span asp-validation-for="SawAt" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-12">
+        <label asp-for="Type" class="control-label"></label>
+        <select asp-for="Type" asp-items="@(Html.GetEnumSelectList<EntertainmentTypes>())" class="form-control"></select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+</form>
+<button type="submit" form="createForm" class="btn btn-primary mt-3 float-end">Save</button>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

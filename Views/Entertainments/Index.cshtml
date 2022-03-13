@@ -1,15 +1,18 @@
 ﻿@model IEnumerable<MVCWebApplication.Models.Entertainment.Entertainment>
-
+@using MVCWebApplication.Enums
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Entertainments</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table dataTableDisplay">
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1>Entertainments</h1>
+    <a class="btn btn-success" onclick='OpenStandartModal("/Entertainments/Create", "abluble")'>
+        <i class="fas fa-film"></i>
+    </a>
+</div>
+
+<table class="table dataTableDisplay text-center">
     <thead>
         <tr>
             <th>
@@ -27,7 +30,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.SawAt)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -41,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type)
+                    @((EntertainmentTypes)item.Type)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Country)
@@ -49,10 +52,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.SawAt)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <td class="d-flex gap-1 justify-content-center">
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
                 </td>
             </tr>
         }
@@ -62,5 +65,5 @@
 @section Scripts {
 <script>
 
-</script>
+</script>   
 }

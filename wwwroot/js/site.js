@@ -10,3 +10,20 @@ $(document).ready(function () {
         }
     });
 });
+
+
+const OpenStandartModal = (url, title) => {
+    console.log(url, title)
+    $.ajax({
+        method: "GET",
+        url: url,
+        contentType: false,
+        dataType: "html",
+
+        success: function (res) {
+            $("#generalModalBody").html(res);
+            $("#generalModalTitle").html(title);
+            $("#generalModal").modal("show");
+        }
+    });
+}
