@@ -45,25 +45,25 @@
     <div class="row">
         <div class="col">
             <h3>Search 1</h3>
-            <input type="text" name="searchString1" id="searchString1" placeholder="Search something"/>
+            <input type="text" name="searchString1" id="searchString1" placeholder="Search something" />
             <button class="btn btn-primary" onclick="searchStudy('#searchString1', '#dataContainer1')"><i class="fas fa-search"></i></button>
             <div id="dataContainer1">
-                @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
+                @{
+                    Html.RenderPartial("_Studies.cshtml", Model.Studies);
+                }
             </div>
         </div>
 
         <div class="col">
             <h3>Search 2</h3>
-            <input type="text" name="searchString2" id="searchString2" placeholder="Search something" onkeyup="searchStudy('#searchString2', '#dataContainer2')"/>
+            <input type="text" name="searchString2" id="searchString2" placeholder="Search something" onkeyup="searchStudy('#searchString2', '#dataContainer2')" />
             <div id="dataContainer2">
-                @{Html.RenderPartial("_Studies.cshtml", Model.Studies);}
+                @{
+                    Html.RenderPartial("_Studies.cshtml", Model.Studies);
+                }
             </div>
         </div>
     </div>
-
-
-
-    
 
     <!-- Modal Add Register -->
     <div class="modal fade" id="newRegModal" tabindex="-1" aria-labelledby="newRegModallLabel" aria-hidden="true">
@@ -83,10 +83,10 @@
 <script>
 
     function searchStudy(inputField, dataContainer){
-        /* 
+        /*
 
         resume later
-        
+
         let searchString = JSON.stringify({searchString: $("#searchString").val()});
         console.log(searchString)
 
@@ -142,8 +142,21 @@
         if(id == undefined)
             id = 0;
 
-        $("#modal-body").load("Studies/OpenDataRegModal?id=" + id, function(){
-            $('#newRegModal').modal("show");
+        // #apporach 1
+        //$("#modal-body").load("Studies/OpenDataRegModal?id=" + id, function(){
+        //    $('#newRegModal').modal("show");
+        //});
+
+        $.ajax({
+            method: "GET",
+            url: `Studies/OpenDataRegModal?id=${id}`,
+            contentType: "application/json; charset=UTF-8",
+            dataType: "html",
+            success: function(res){
+                console.log(res)
+                $("#modal-body").html(res);
+                $('#newRegModal').modal("show");
+            }
         });
 
     }

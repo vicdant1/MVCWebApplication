@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVCWebApplication.Models.Studies;
+using MVCWebApplication.Models.Entertainment;
 
 namespace MVCWebApplication.Data
 {
@@ -9,5 +10,7 @@ namespace MVCWebApplication.Data
         { }
 
         public DbSet<Study> Studies { get; set; }
+
+        public DbSet<MVCWebApplication.Models.Entertainment.Entertainment> Entertainment { get; set; }
     }
 }
