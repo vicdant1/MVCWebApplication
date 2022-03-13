@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCWebApplication.Data;
+using MVCWebApplication.Helpers;
 using MVCWebApplication.Models.Entertainment;
 
 namespace MVCWebApplication.Controllers
@@ -20,13 +21,11 @@ namespace MVCWebApplication.Controllers
             _context = context;
         }
 
-        // GET: Entertainments
         public async Task<IActionResult> Index()
         {
             return View(await _context.Entertainment.ToListAsync());
         }
 
-        // GET: Entertainments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,80 +43,65 @@ namespace MVCWebApplication.Controllers
             return View(entertainment);
         }
 
-        // GET: Entertainments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
-            return PartialView("~/Views/Entertainments/_Create.cshtml");
+            if(id == 0)
+            {
+                return PartialView("~/Views/Entertainments/_AddOrEdit.cshtml");
+            }
+
+            var model = await _context.Entertainment.FindAsync(id);
+            if (model == null) return BadRequest("Invalid data source");
+
+            return PartialView("~/Views/Entertainments/_AddOrEdit.cshtml", model);
         }
 
-        // POST: Entertainments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Year,Type,Country,SawAt")] Entertainment entertainment)
+        public async Task<IActionResult> AddOrEdit([Bind("Id,Title,Year,Type,Country,SawAt")] Entertainment entertainment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(entertainment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return PartialView("~/Views/Entertainments/_Create.cshtml", entertainment);
-        }
+                string entertainmentStatus = "";
 
-        // GET: Entertainments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var entertainment = await _context.Entertainment.FindAsync(id);
-            if (entertainment == null)
-            {
-                return NotFound();
-            }
-            return View(entertainment);
-        }
-
-        // POST: Entertainments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Year,Type,Country,SawAt")] Entertainment entertainment)
-        {
-            if (id != entertainment.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if(entertainment.Id == 0)
                 {
-                    _context.Update(entertainment);
+                    _context.Add(entertainment);
                     await _context.SaveChangesAsync();
+                    entertainmentStatus = "added";
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!EntertainmentExists(entertainment.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(entertainment);
+                        await _context.SaveChangesAsync();
+                        entertainmentStatus = "editted";
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!EntertainmentExists(entertainment.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return Json(new {isValid = true, 
+                                 html=Helper.RenderRazorViewToString(this, "_TableBody", await _context.Entertainment.ToListAsync()),
+                                 notification=$"Entertainment {entertainmentStatus} successfully :)"});
             }
-            return View(entertainment);
+
+                return Json(new {isValid = false,
+                                 html=Helper.RenderRazorViewToString(this, "_AddOrEdit", entertainment),
+                                 notification = $"Something went wrong :'("
+                });
         }
 
-        // GET: Entertainments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,11 +116,11 @@ namespace MVCWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(entertainment);
+            return PartialView("~/Views/Entertainments/_Delete.cshtml", entertainment);
         }
 
         // POST: Entertainments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

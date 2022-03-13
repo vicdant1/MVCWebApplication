@@ -1,0 +1,28 @@
+﻿@using MVCWebApplication.Enums
+@model IEnumerable<MVCWebApplication.Models.Entertainment.Entertainment>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Year)
+        </td>
+        <td>
+            @((EntertainmentTypes)item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SawAt, "{0:dd/MM/yyyy}")
+        </td>
+        <td class="d-flex gap-1 justify-content-center">
+            <a class="btn btn-primary" onclick="OpenStandartModal('/Entertainments/AddOrEdit/@item.Id', 'Edit a register')"><i class="fas fa-edit"></i></a>
+            <a class="btn btn-danger" onclick="OpenDeleteModal('/Entertainments/Delete/@item.Id')"><i class="fas fa-trash"></i></a>
+            <a class="btn btn-success" onclick="OpenStandartModal('/Entertainments/Details/@item.Id', 'Details')"><i class="fas fa-info-circle"></i></a>
+        </td>
+    </tr>
+}

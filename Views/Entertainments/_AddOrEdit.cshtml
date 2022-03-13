@@ -5,7 +5,8 @@
     ViewData["Title"] = "Create";
     Layout = null;
 }
-<form id="createForm" class="row" asp-action="Create" method="post">
+<form id="createForm" class="row" asp-action="AddOrEdit" autocomplete="off"
+      method="post" asp-route-id="@Model?.Id" onsubmit="return handleJqueryFormSubmit(this);">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group col-md-6">
         <label asp-for="Title" class="control-label"></label>

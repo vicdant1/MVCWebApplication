@@ -1,0 +1,28 @@
+﻿@using MVCWebApplication.Enums
+@model MVCWebApplication.Models.Entertainment.Entertainment
+
+<div class="modal-body">
+    Are you sure about delete <b>@Model.Title</b>?<br />
+    <hr />
+
+    <div class="row align-items-center justify-content-between">
+        <div class="form-group col-md-4">
+            <label for="form_Year">Year</label>
+            <input id="form_Year" class="form-control col-md-4" type="text" value="@Model.Year" readonly>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="form_Type">Type</label>
+            <input id="form_Type" class="form-control" type="text" value="@((EntertainmentTypes)Model.Type)" readonly>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="form_Country">Country</label>
+            <input id="form_Country" class="form-control" type="text" value="@Model.Country" readonly>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <form method="post" asp-action="DeleteConfirmed" asp-route-id="@Model.Id">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>

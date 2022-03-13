@@ -13,7 +13,6 @@ $(document).ready(function () {
 
 
 const OpenStandartModal = (url, title) => {
-    console.log(url, title)
     $.ajax({
         method: "GET",
         url: url,
@@ -26,4 +25,50 @@ const OpenStandartModal = (url, title) => {
             $("#generalModal").modal("show");
         }
     });
+}
+
+const OpenDeleteModal = (url) => {
+    $.ajax({
+        method: "GET",
+        url: url,
+        contentType: false,
+        processData: false,
+        dataType: "html",
+
+        success: function (res) {
+            $("#deleteModal").modal("show");
+            $("#ActionDeleteBody").html(res);
+        }
+    });
+}
+
+
+const handleJqueryFormSubmit = (form) => {
+    $.ajax({
+        method: "POST",
+        url: form.action,
+        data: new FormData(form),
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        success: function (res) {
+            if (res.isValid) {
+                $("#mainTableContainer").html(res.html);
+
+                $("#generalModalBody").html('');
+                $("#generalModalTitle").html('');
+                $("#generalModal").modal("hide");
+                $.notify(res.notification, "success");
+            }
+            else {
+                $("#generalModalBody").html(res.html);
+                $.notify(res.notification, "error");
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
+    return false;
 }

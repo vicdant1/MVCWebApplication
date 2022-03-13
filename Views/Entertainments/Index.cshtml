@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<MVCWebApplication.Models.Entertainment.Entertainment>
-@using MVCWebApplication.Enums
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,12 +6,12 @@
 
 <div class="d-flex align-items-center justify-content-between mb-3">
     <h1>Entertainments</h1>
-    <a class="btn btn-success" onclick='OpenStandartModal("/Entertainments/Create", "abluble")'>
+    <a class="btn btn-success" onclick='OpenStandartModal("/Entertainments/AddOrEdit", "Add new register")'>
         <i class="fas fa-film"></i>
     </a>
 </div>
 
-<table class="table dataTableDisplay text-center">
+<table class="table text-center">
     <thead>
         <tr>
             <th>
@@ -33,37 +32,9 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @((EntertainmentTypes)item.Type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Country)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SawAt)
-                </td>
-                <td class="d-flex gap-1 justify-content-center">
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
-                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
-                </td>
-            </tr>
+    <tbody id="mainTableContainer">
+        @{
+            await Html.RenderPartialAsync("_TableBody.cshtml", Model);
         }
     </tbody>
 </table>
-
-@section Scripts {
-<script>
-
-</script>   
-}

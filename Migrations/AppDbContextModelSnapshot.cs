@@ -49,7 +49,7 @@ namespace MVCWebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Entertainment");
+                    b.ToTable("Entertainment", (string)null);
                 });
 
             modelBuilder.Entity("MVCWebApplication.Models.Studies.Study", b =>
@@ -75,7 +75,7 @@ namespace MVCWebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Studies");
+                    b.ToTable("Studies", (string)null);
                 });
 #pragma warning restore 612, 618
         }
