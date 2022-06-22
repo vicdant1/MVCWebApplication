@@ -1,4 +1,9 @@
-> Status: study 📘
+# MVCWebApplication 📘
+This is a MVC Application I built with Microsoft technologies. This is a study project, so here there are many concepts of what a software engineer will need on daily routine.
+## Technologies
 
-# MVCWebApplication
-Small web MVC application called JayVerse. It was built for studying about Microsoft ASP.NET MVC Concepts.
+.NET Core, ASPNET MVC, Bootstrap 5, Entity Framework Core, SQL Server, Razor Engine.
+## Authorship
+
+- [@vicdant1](https://www.github.com/vicdant1)
+
